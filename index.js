@@ -35,7 +35,7 @@ app.use(session({
 app.use('/',routes);
 app.use('/users',users);
 
-app.set('port',3000);
+app.set('port',3001);
 app.listen(app.get('port'), () => {
     console.log('Server is up and running on port number ' + app.get('port'));
 });
