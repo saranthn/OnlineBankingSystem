@@ -1,16 +1,24 @@
-
-<link rel="stylesheet" type="text/css" media="screen" href="/css/bootstrap.css" />
-<link rel="stylesheet" type="text/css" media="screen" href="/css/loginpage_style.css" />
-<script src="/js/bootstrap.js"></script>
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/login.css" />
+    <script src="/js/bootstrap.js"></script>
+</head>
+<body>
     <div class="container">
         <div class="card card-container">
             <img id="profile-img" class="profile-img-card" src="https://via.placeholder.com/150">
             <p id="profile-name" class="profile-name-card"> Username </p>
             <br>
-            <form class="form-signin" method="POST">
+            <form class="form-signin" method="post" action="/users/login">
                 <span id="reauth-email" class="reauth-email"></span>
-                <input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
-                <input type="text" id="inputPassord" class="form-control" placeholder="Password" required>
+                <input type="text" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
+                <input type="password" id="inputPassord" name="password" class="form-control" placeholder="Password" required>
                 <br>
                 <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
             </form>
@@ -19,3 +27,5 @@
             </a>
         </div>
     </div>
+</body>
+</html>

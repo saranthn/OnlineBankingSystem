@@ -5,8 +5,10 @@ router.get('/login',function (req,res) {
 	res.render('login');
 });
 
-router.get('/register',function (req,res) {
-	res.render('register');
+router.post('/login',function (req,res) {
+	var username = req.body.username;
+	var password = req.body.password;
+	console.log(username);
 });
 
 module.exports = router;
