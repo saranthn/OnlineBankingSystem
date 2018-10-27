@@ -11,6 +11,7 @@ var db = mongoose.connection;
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var admin = require('./routes/admin');
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use(session({
 
 app.use('/',routes);
 app.use('/users',users);
+app.use('/admin',admin);
 
 app.set('port',3001);
 app.listen(app.get('port'), () => {
