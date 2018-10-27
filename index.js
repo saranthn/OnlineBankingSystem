@@ -3,6 +3,8 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var exphbs = require('express-handlebars');
+var passport = require('passport');
+var LocalStrategy = require('passport-local'),Strategy;
 var path = require('path');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
@@ -32,6 +34,9 @@ app.use(session({
 	saveUninitialized : true,
 	resave : true
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/',routes);
 app.use('/users',users);
