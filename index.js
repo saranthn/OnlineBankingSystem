@@ -35,6 +35,11 @@ app.use(session({
 	resave : true
 }));
 
+app.use(function (req,res,next) {
+	res.locals.user = req.user || null;
+	next();
+});
+
 app.use(passport.initialize());
 app.use(passport.session());
 

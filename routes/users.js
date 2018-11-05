@@ -9,6 +9,19 @@ router.get('/login',function (req,res) {
 	res.render('login');
 });
 
+router.get('/:username/dashboard',function (req,res) {
+	console.log(req.params.username);
+	res.render('user_dashboard',{ username: req.user.username });
+});
+
+router.get('/:username/acc_stmt', function (req,res) {
+  res.render('user_acc_stmt',{ username: req.user.username });
+});
+
+router.get('/:username/profile', function (req,res) {
+  res.render('user_profile',{ username: req.user.username });
+});
+
 passport.use(new LocalStrategy(
   function(username, password, done) {
   	User.getUserByUsername(username,function (err,user) {
@@ -40,11 +53,11 @@ passport.deserializeUser(function(id, done) {
 });
 
 router.post('/login',
-  passport.authenticate('local',{successRedirect:'/',failureRedirect:'users/login'}),
+  passport.authenticate('local',{failureRedirect:'/users/login'}),
   function(req, res) {
     // If this function gets called, authentication was successful.
     // `req.user` contains the authenticated user.
-    res.redirect('/users/' + req.user.username);
+    res.redirect('/users/' + req.user.username+'/dashboard');
   });
 
 module.exports = router;
