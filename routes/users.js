@@ -42,6 +42,7 @@ router.get('/:username/checkbook_request', ensureAuthenticated, function (req,re
 });
 
 router.get('/:username/transactions', ensureAuthenticated, function (req,res) {
+
   var accdata;
   User.findOne({username: req.user.username}).exec((err,userdata)=>{
      if(err) throw err;
@@ -54,7 +55,44 @@ router.get('/:username/transactions', ensureAuthenticated, function (req,res) {
         
       });
 
+  User.findOne({username: req.user.username}).populate('accounts').exec((err,userdata)=>{
+    if(err) throw err;
+    var accounts = userdata.accounts;
+    if(err) throw err;
+    res.render('user_transactions',{  accountdata: accounts,
+                                      transactiondata: null, //accdata[0].transactions, 
+                                      username: req.user.username});  
   })
+});
+
+router.post('/:username/transactions_post', function (req, res) {
+
+    var accno = req.body.acc_sel;
+    //console.log("Selected account no: " + accno);
+    User.findOne({username: req.user.username}).populate('accounts').exec((err,userdata)=>{
+       if(err) throw err;
+       //console.log("Userdata: " + userdata);
+
+       Account.getAccount({}, function(err,totalaccount){
+          if(err) throw err;
+
+          Account.getAccount({accountNo: accno},function(err,accdata){
+            if(err) throw err;
+            //console.log("Selected account data: " + accdata);
+  
+            var transactionlist = accdata[0].transactions;
+            //console.log("transaction list: " + transactionlist);
+            
+            res.render('user_transactions',{  accountdata: totalaccount,
+                          transactiondata: transactionlist, 
+                          username: req.user.username,
+                        });
+  
+          });
+
+       });
+  
+    });
 });
 
 router.get('/:username/profile', ensureAuthenticated, function (req,res) {
