@@ -1,12 +1,15 @@
 var mongoose =  require('mongoose');
 var bcrypt = require('bcryptjs');
 
+var Account = require('../models/account');
+
 var UserSchema = mongoose.Schema({
 	username: String,
 	firstname: String,
 	lastname: String,
 	password: String,
 	email: String,
+	accounts: [{type:mongoose.Schema.Types.ObjectId, ref: 'Account'}],
 	city: String,
 	state: String,
 	pan: Number,
@@ -39,4 +42,12 @@ module.exports.comparePassword = function (candidatePassword, hash, callback) {
 		 if(err) throw err;
 		 callback(null, isMatch);
 	});
+}
+
+module.exports.createAccount = function (username, newAccount, callback) {
+	newAccount.save(callback);
+}
+
+module.exports.addAccountToUser = function (username, newAccount, callback) {
+	User.findOneAndUpdate({username : username},{$push:{accounts:newAccount}},{new: true}, callback);
 }

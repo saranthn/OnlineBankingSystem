@@ -49,14 +49,14 @@
           </li>
 
           <li class="nav-item"> 
-            <a class="nav-link" href="/users/{{username}}/user_checkbook">
+            <a class="nav-link" href="/users/{{username}}/checkbook_request">
               <i class="material-icons">receipt</i>
               <p>Checkbook</p>
             </a>
           </li>
 
           <li class="nav-item"> 
-            <a class="nav-link" href="/users/{{username}}/user_transactions">
+            <a class="nav-link" href="/users/{{username}}/transactions">
               <i class="material-icons">repeat</i>
               <p>Transactions</p>
             </a>
@@ -119,8 +119,8 @@
                   </p>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#"><i class="material-icons" style="margin-right:20px;">person</i>Profile</a>
-                  <a class="dropdown-item" href="#"><i class="material-icons" style="margin-right:20px;">logout</i>Logout</a>
+                  <a class="dropdown-item" href="/users/{{username}}/profile"><i class="material-icons" style="margin-right:20px;">person</i>Profile</a>
+                  <a class="dropdown-item" href="/users/logout"><i class="material-icons" style="margin-right:20px;">logout</i>Logout</a>
                 </div>
               </li>
 
@@ -181,17 +181,21 @@
               <div class="card card-chart">
                 <div class="card-body">
                   <h4 style="font-weight:400;" class="card-title">Transfer Money </h4>
-                  <div class="row form-group">
-                      <input class="form-control" type="text" placeholder="enter transaction id">
-                  </div>
-                  <div class="row form-group">
-                      <input class="form-control col-md-6" type="text" placeholder="enter the amount">
-                  </div>
-                  
-                  <div class="row" style="margin-left:65%;">
-                      <button href="#" class="btn btn-primary">Transfer</button>
-                  </div>
-
+                  <form method="post">
+                    <div class="row form-group">
+                        <input class="form-control" type="text" placeholder="enter accountno" name="accountNo">
+                    </div>
+                    <div class="row form-group">
+                        <input class="form-control" type="text" placeholder="enter beneficiary" name="beneficiary">
+                    </div>
+                    <div class="row form-group">
+                        <input class="form-control col-md-6" type="text" placeholder="enter the amount" name="amount">
+                    </div>
+                    
+                    <div class="row" style="margin-left:65%;">
+                        <button type="submit" class="btn btn-primary">Transfer</button>
+                    </div>
+                  </form>
                 </div>
                 <div class="card-footer">
                   <div class="stats">

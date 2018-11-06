@@ -33,42 +33,42 @@
       <div class="sidebar-wrapper">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="/users/{{username}}/dashboard">
+            <a class="nav-link" href="/users/{{userDetails.username}}/dashboard">
               <i class="material-icons">dashboard</i>
               <p>Dashboard</p>
             </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="/users/{{username}}/acc_stmt">
+            <a class="nav-link" href="/users/{{userDetails.username}}/acc_stmt">
               <i class="material-icons">event_note</i>
               <p>Account Statement</p>
             </a>
           </li>
 
           <li class="nav-item"> 
-            <a class="nav-link" href="/users/{{username}}/user_checkbook">
+            <a class="nav-link" href="/users/{{userDetails.username}}/checkbook_request">
               <i class="material-icons">receipt</i>
               <p>Checkbook</p>
             </a>
           </li>
 
           <li class="nav-item"> 
-            <a class="nav-link" href="/users/{{username}}/user_transactions">
+            <a class="nav-link" href="/users/{{userDetails.username}}/transactions">
               <i class="material-icons">repeat</i>
               <p>Transactions</p>
             </a>
           </li>
 
           <li class="nav-item active">
-            <a class="nav-link" href="/users/{{username}}/profile">
+            <a class="nav-link" href="/users/{{userDetails.username}}/profile">
               <i class="material-icons">person</i>
               <p>User Profile</p>
             </a>
           </li>
 
           <li class="nav-item ">
-            <a class="nav-link" href="/users/{{username}}/user_notifications">
+            <a class="nav-link" href="/users/{{userDetails.username}}/user_notifications">
               <i class="material-icons">notifications</i>
               <p>Notifications</p>
             </a>
@@ -117,8 +117,8 @@
                   </p>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#"><i class="material-icons" style="margin-right:20px;">person</i>Profile</a>
-                  <a class="dropdown-item" href="#"><i class="material-icons" style="margin-right:20px;">logout</i>Logout</a>
+                  <a class="dropdown-item" href="/users/{{userDetails.username}}/profile"><i class="material-icons" style="margin-right:20px;">person</i>Profile</a>
+                  <a class="dropdown-item" href="/users/logout"><i class="material-icons" style="margin-right:20px;">logout</i>Logout</a>
                 </div>
               </li>
 
@@ -137,34 +137,29 @@
                   <p class="card-category">Complete your profile</p>
                 </div>
                 <div class="card-body">
-                  <form>
+                  <form method="post">
 
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="bmd-label-floating">First Name</label>
-                          <input type="text" class="form-control">
+                          <input type="text" class="form-control" value="{{userDetails.firstname}}" name="firstname">
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="bmd-label-floating">Last Name</label>
-                          <input type="text" class="form-control">
+                          <input type="text" class="form-control" value="{{userDetails.lastname}}" name="lastname">
                         </div>
                       </div>
                     </div>
 
                     <div class="row">
-                      <div class="col-md-4">
-                        <div class="form-group">
-                          <label class="bmd-label-floating">Username</label>
-                          <input type="text" class="form-control">
-                        </div>
-                      </div>
+
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="bmd-label-floating">Email address</label>
-                          <input type="email" class="form-control">
+                          <input type="email" class="form-control" value="{{userDetails.email}}" name="email">
                         </div>
                       </div>
                     </div>
@@ -173,7 +168,7 @@
                       <div class="col-md-12">
                         <div class="form-group">
                           <label class="bmd-label-floating">Address</label>
-                          <input type="text" class="form-control">
+                          <input type="text" class="form-control" value="{{userDetails.address}}" name="address">
                         </div>
                       </div>
                     </div>
@@ -182,22 +177,17 @@
                       <div class="col-md-4">
                         <div class="form-group">
                           <label class="bmd-label-floating">City</label>
-                          <input type="text" class="form-control">
+                          <input type="text" class="form-control" value="{{userDetails.city}}" name="city">
                         </div>
                       </div>
-                      <div class="col-md-4">
-                        <div class="form-group">
-                          <label class="bmd-label-floating">Country</label>
-                          <input type="text" class="form-control">
-                        </div>
-                      </div>
+
                     </div>
 
                     <div class="row">
                       <div class="col-md-6">
                           <div class="form-group">
                             <label class="bmd-label-floating">Postal Code</label>
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" value="{{userDetails.zip}}" name="zip">
                           </div>
                         </div>
                     </div>
@@ -206,7 +196,7 @@
                       <div class="col-md-6">
                           <div class="form-group">
                             <label class="bmd-label-floating">PAN</label>
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" value="{{userDetails.pan}}" name="pan">
                           </div>
                         </div>
                     </div>

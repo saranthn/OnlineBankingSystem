@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var User = require('../models/user');
+var Account = require('../models/account');
 
 router.get('/login',function (req,res) {
 	res.render('login');
@@ -23,8 +24,6 @@ router.post('/register',function (req,res) {
 	var zip = req.body.zip;
 	var address = req.body.address;
 
-	console.log(username);
-
 	var newUser = new User({
 		username: username,
 		password: password,
@@ -43,6 +42,31 @@ router.post('/register',function (req,res) {
 		console.log(user);
 	});
 
+	res.redirect('/users/login');
+});
+
+router.post('/account', function (req,res) {
+
+	var username = req.body.username;
+	var accountNo = req.body.accountNo;
+	var balance = req.body.balance;
+	var type = req.body.type;
+
+	var newAccount = new Account({
+		accountNo: accountNo,
+		balance: balance,
+		type: type
+	});
+
+	User.createAccount(username, newAccount, function (err,user) {
+		if(err) throw err;
+		else
+		{
+			User.addAccountToUser(username,newAccount,function (err) {
+				if(err) throw err;
+			});
+		}
+	});
 	res.redirect('/users/login');
 });
 

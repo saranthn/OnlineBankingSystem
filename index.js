@@ -9,6 +9,7 @@ var path = require('path');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/bank', { useNewUrlParser: true });
+mongoose.set('useFindAndModify', false);
 var db = mongoose.connection;
 
 var routes = require('./routes/index');

@@ -35,7 +35,7 @@
               </a>
             </li>
   
-            <li class="nav-item active">
+            <li class="nav-item">
               <a class="nav-link" href="/users/{{username}}/acc_stmt">
                 <i class="material-icons">event_note</i>
                 <p>Account Statement</p>
@@ -49,7 +49,7 @@
               </a>
             </li>
   
-            <li class="nav-item"> 
+            <li class="nav-item active"> 
               <a class="nav-link" href="/users/{{username}}/transactions">
                 <i class="material-icons">repeat</i>
                 <p>Transactions</p>
@@ -64,7 +64,7 @@
             </li>
   
             <li class="nav-item ">
-              <a class="nav-link" href="/users/{{username}}/user_notifications">
+              <a class="nav-link" href="/users/{{username}}/notifications">
                 <i class="material-icons">notifications</i>
                 <p>Notifications</p>
               </a>
@@ -75,10 +75,10 @@
     </div>
     <div class="main-panel">
       <!-- Navbar -->
-       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+      <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
         <div class="container-fluid">
           <div class="navbar-wrapper">
-            <a class="navbar-brand" href="#pablo">User Profile</a>
+            <a class="navbar-brand" href="#pablo">Account Statement</a>
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="sr-only">Toggle navigation</span>
@@ -89,7 +89,7 @@
           <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">
               <li class="nav-item dropdown">
-                <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="material-icons">notifications</i>
                   <span class="notification">5</span>
                   <p class="d-lg-none d-md-block">
@@ -104,7 +104,6 @@
                   <a class="dropdown-item" href="#">Another One</a>
                 </div>
               </li>
-              
               <li class="nav-item dropdown">
                 <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="material-icons">person</i>
@@ -117,7 +116,6 @@
                   <a class="dropdown-item" href="/users/logout"><i class="material-icons" style="margin-right:20px;">logout</i>Logout</a>
                 </div>
               </li>
-
             </ul>
           </div>
         </div>
@@ -131,9 +129,9 @@
                   <div class="card card-stats">
                     <div class="card-header card-header-warning card-header-icon">
                       <div class="card-icon">
-                        <i class="material-icons">event_note</i>
+                        <i class="material-icons">repeat</i>
                       </div>
-                      <h4 class="card-title" style="font-weight:400;">Select Account for Statement</h4>
+                      <h4 class="card-title" style="font-weight:400;">List of last done Transactions</h4>
                     </div>
     
                     <div class="card-body">
@@ -142,40 +140,25 @@
                             <table class="table">
                               <tbody>
                                 <tr>
-                                  <th style="text-align:left;">Select</th>
-                                  <th style="text-align:left;">Account No</th>
-                                  <th style="text-align:left;">Type</th>
-                                  <th style="text-align:left;">Branch</th>                                    
+                                  <th style="text-align:left;">Date</th>
+                                  <th style="text-align:left;">Narration</th>
+                                  <th style="text-align:left;">Ref. No</th>
+                                  <th style="text-align:left;">Debit</th>
+                                  <th style="text-align:left;">Credit</th>                                    
                                 </tr>
                                 <tr>
-                                  <td style="text-align:left;">
-                                    <div class="form-check">
-                                      <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" name="acc_sel" checked>
-                                        <span class="form-check-sign">
-                                          <span class="check"></span>
-                                        </span>
-                                      </label>
-                                    </div>
-                                  </td>
-                                  <td style="text-align:left;">103749873289</td>
-                                  <td style="text-align:left;">Savings</td>
-                                  <td style="text-align:left;">NIT Trichy</td>
+                                  <td style="text-align:left;">21-9-2018</td>
+                                  <td style="text-align:left;">To Transfer.<br>UPI. To uid : 10646468465</td>
+                                  <td style="text-align:left;">NA</td>
+                                  <td style="text-align:left;">420</td>
+                                  <td style="text-align:left;">NA</td>
                                 </tr>
                                 <tr>
-                                    <td style="text-align:left;">
-                                      <div class="form-check">
-                                        <label class="form-check-label">
-                                          <input class="form-check-input" type="radio" name="acc_sel">
-                                          <span class="form-check-sign">
-                                            <span class="check"></span>
-                                          </span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td style="text-align:left;">103749873289</td>
-                                    <td style="text-align:left;">Savings</td>
-                                    <td style="text-align:left;">NIT Trichy</td>
+                                    <td style="text-align:left;">19-9-2018</td>
+                                    <td style="text-align:left;">By Transfer.<br>UPI. From uid : 10646468465</td>
+                                    <td style="text-align:left;">NA</td>
+                                    <td style="text-align:left;">NA</td>
+                                    <td style="text-align:left;">2000</td>
                                   </tr>
                               </tbody>
                             </table>
@@ -185,88 +168,6 @@
                   </div>
                 </div>            
               </div>
-          <div class="row">
-              <div class="col-lg-6 col-md-12">
-                <div class="card">
-                  <div class="card-header card-header-tabs card-header-primary">
-                    <div class="nav-tabs-navigation">
-                      <div class="nav-tabs-wrapper">
-                        <span style="font-weight: 400;" class="nav-tabs-title">Mode:</span>
-                        <ul class="nav nav-tabs" data-tabs="tabs">
-                          <li class="nav-item">
-                            <a class="nav-link active" href="#monthly" data-toggle="tab"> 
-                              Monthly
-                              <div class="ripple-container"></div>
-                            </a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link" href="#annual" data-toggle="tab">
-                              Annual
-                              <div class="ripple-container"></div>
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="tab-content">
-                      <div class="tab-pane active" id="monthly">
-                        <form class="form-inline">
-                            <div class="form-group mb-2">
-                              <label for="staticEmail2" class="sr-only"></label>
-                              <p style="font-weight:400;" type="text" class="form-control-plaintext">Enter Month :</p>
-                            </div>
-                            <div class="form-group mx-sm-3 mb-2">
-                              <label for="inputPassword2" class="sr-only">Month</label>
-                              <input type="text" class="form-control" id="inputMonth" placeholder="Enter month name">
-                            </div>
-                            <button type="submit" class="btn btn-primary mb-2">Set</button>
-                          </form>
-                      </div>
-                      <div class="tab-pane" id="annual">
-                        <form class="form-inline">
-                          <div class="form-group mb-2">
-                            <label for="staticEmail2" class="sr-only"></label>
-                            <p style="font-weight:400;" type="text" class="form-control-plaintext">Enter Year :</p>
-                          </div>
-                          <div class="form-group mx-sm-3 mb-2">
-                            <label for="inputPassword2" class="sr-only">Year</label>
-                            <input type="text" class="form-control" id="inputyear" pattern="[0-9]{4}" placeholder="Enter year no">
-                          </div>
-                          <button type="submit" class="btn btn-primary mb-2">Set</button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6 col-md-12">
-                  <div class="card">
-                    <div class="card-header card-header-warning">
-                      <h5 class="card-title">No of Records per Page :</h5>
-                    </div>
-                    <div class="card-body">
-                        <form class="form-inline">
-                            <div class="form-group mb-2">
-                              <label for="staticEmail2" class="sr-only"></label>
-                              <p style="font-weight:400;" type="text" class="form-control-plaintext">Enter Year :</p>
-                            </div>
-                            <div class="form-group mx-sm-3 mb-2">
-                              <label for="inputPassword2" class="sr-only">Year</label>
-                              <input type="text" class="form-control" id="inputyear" pattern="[0-9]{4}" placeholder="Enter year no">
-                            </div>
-                            <button type="submit" class="btn btn-warning mb-2">Set</button>
-                          </form>
-                    </div>
-                  </div>
-                </div>  
-            </div>
-          <div class="row">
-            <div class="col-md-12">
-                <button type="button" class="btn btn-success" style="float:right;">Go</button>
-            </div>
-          </div>
         </div>
       </div>
       <footer class="footer">
