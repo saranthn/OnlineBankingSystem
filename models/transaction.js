@@ -3,6 +3,7 @@ var mongoose =  require('mongoose');
 var transactionSchema = mongoose.Schema({
 	date : Date,
 	beneficiary : String,
+	beneficiaryAccountNo : Number,
 	amount : Number
 });
 

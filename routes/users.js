@@ -30,7 +30,6 @@ router.get('/logout',function (req,res) {
 })
 
 router.get('/:username/dashboard', ensureAuthenticated,function (req,res) {
-	console.log(req.params.username);
 	res.render('user_dashboard',{ username: req.user.username });
 });
 
@@ -43,20 +42,15 @@ router.get('/:username/checkbook_request', ensureAuthenticated, function (req,re
 });
 
 router.get('/:username/transactions', ensureAuthenticated, function (req,res) {
-  //console.log("transaction get :- " + req.user.username);
   var accdata;
   User.findOne({username: req.user.username}).exec((err,userdata)=>{
      if(err) throw err;
      var accounts = userdata.accounts;
-     //console.log("accounts data: " + accounts);
-     //console.log("accounts[1] data: " + accounts[1]);
 
      Account.getAccount({},function(err,accdata){
         if(err) throw err;
-        console.log(accdata);
-        res.render('user_transactions',{accountdata: accdata,
-                                           transactiondata: accdata[0].transactions, 
-                                          username: req.user.username});
+        // console.log(accdata);
+        res.render('user_transactions',{accountdata: accdata, transactiondata: accdata[0].transactions, username: req.user.username});
         
       });
 
@@ -71,31 +65,68 @@ router.post('/:username/dashboard', function (req,res) {
   var username = req.user.username;
   var accountNo = req.body.accountNo;
   var beneficiary = req.body.beneficiary;
-  var amount = req.body.amount;
+  var beneficiaryAccountNo = req.body.beneficiaryAccountNo;
+  var amount = parseInt(req.body.amount);
 
-  if(User.findOne({username : beneficiary})!=null)
-  {
-    var currdate = Date.now();
+  User.getUserByUsername(beneficiary,function (err,user) {
+    if(err) throw err;
+    if(user)
+    {
+      var currdate = Date.now();
 
-    //Creating Transaction schema objext
-    var data = new Transaction({
-      date: currdate,
-      amount: amount,
-      beneficiary: beneficiary
-    });
+      //Creating Transaction schema objext
+      var data = new Transaction({
+        date: currdate,
+        amount: -amount,
+        beneficiary: beneficiary,
+        beneficiaryAccountNo: beneficiaryAccountNo
+      });
 
-    data.save(function (err) {
-      if(err) throw err;
-      Account.addTransaction(username, accountNo, data, function (err,user) {
-        if(err) throw err;
+      var beneficiarydata = new Transaction({
+        date: currdate,
+        amount: amount,
+        beneficiary: username,
+        beneficiaryAccountNo: accountNo
       })
-    });
-  }
-  else
-  {
-    console.log("not valid user");
-    res.redirect('/users/'+username+'dashboard');
-  }
+
+      Account.getBalance(accountNo,function (err, data) {
+        if(err) throw err;
+        console.log(data.balance);
+        Account.updateBalance(accountNo,data.balance-amount,function (err, data) {
+          if(err) throw err;
+        });
+      });
+
+      Account.getBalance(beneficiaryAccountNo,function (err, data) {
+        if(err) throw err;
+        console.log(data.balance);
+        Account.updateBalance(beneficiaryAccountNo,data.balance+amount,function (err, data) {
+          if(err) throw err;
+          console.log("done");
+        });
+      });
+
+      data.save(function (err) {
+        if(err) throw err;
+        Account.addTransaction(username, accountNo, data, function (err,user) {
+          if(err) throw err;
+        });
+      });
+
+      beneficiarydata.save(function (err) {
+        if(err) throw err;
+        Account.addTransaction(beneficiary, beneficiaryAccountNo, beneficiarydata, function (err,user) {
+          if(err) throw err;
+        });
+      });
+    }
+    else
+    {
+      console.log("not valid beneficiary");
+      res.redirect('/users/'+username+'/dashboard');
+    }
+  });
+
 });
 
 passport.use(new LocalStrategy(
@@ -140,7 +171,6 @@ router.post('/:username/profile', function (req,res) {
 
   User.findOneAndUpdate({username:req.user.username}, req.body, {new : true}, function (err, user) {
     if(err) throw err;
-    console.log(req.user.username);
   });
 
   res.redirect('/users/'+req.user.username+'/profile');
