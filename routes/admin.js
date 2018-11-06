@@ -4,6 +4,10 @@ var router = express.Router();
 var User = require('../models/user');
 var Account = require('../models/account');
 
+router.get('/', function(req,res){
+	res.render('admindashboard');
+});
+
 router.get('/login',function (req,res) {
 	res.render('login');
 });
