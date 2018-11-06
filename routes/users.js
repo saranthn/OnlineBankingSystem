@@ -43,7 +43,24 @@ router.get('/:username/checkbook_request', ensureAuthenticated, function (req,re
 });
 
 router.get('/:username/transactions', ensureAuthenticated, function (req,res) {
-  res.render('user_transactions',{ username: req.user.username });
+  //console.log("transaction get :- " + req.user.username);
+  var accdata;
+  User.findOne({username: req.user.username}).exec((err,userdata)=>{
+     if(err) throw err;
+     var accounts = userdata.accounts;
+     //console.log("accounts data: " + accounts);
+     //console.log("accounts[1] data: " + accounts[1]);
+
+     Account.getAccount({},function(err,accdata){
+        if(err) throw err;
+        console.log(accdata);
+        res.render('user_transactions',{accountdata: accdata,
+                                           transactiondata: accdata[0].transactions, 
+                                          username: req.user.username});
+        
+      });
+
+  })
 });
 
 router.get('/:username/profile', ensureAuthenticated, function (req,res) {
@@ -56,7 +73,12 @@ router.post('/:username/dashboard', function (req,res) {
   var beneficiary = req.body.beneficiary;
   var amount = req.body.amount;
 
+  //getting current date
+  var currdate = Date.now();
+
+  //Creating Transaction schema objext
   var data = new Transaction({
+    date: currdate,
     amount: amount,
     beneficiary: beneficiary
   });
