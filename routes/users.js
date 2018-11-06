@@ -30,39 +30,36 @@ router.get('/logout',function (req,res) {
 })
 
 router.get('/:username/dashboard', ensureAuthenticated,function (req,res) {
-	res.render('user_dashboard',{ username: req.user.username });
+	  User.findOne({username: req.user.username}).populate('accounts').exec((err,userdata)=>{
+    if(err) throw err;
+    var accounts = userdata.accounts;
+    res.render('user_dashboard',{accountdata: accounts, username: req.user.username});  
+  });
 });
 
 router.get('/:username/acc_stmt', ensureAuthenticated, function (req,res) {
-  res.render('user_acc_stmt',{ username: req.user.username });
+  User.findOne({username: req.user.username}).populate('accounts').exec((err,userdata)=>{
+    if(err) throw err;
+    var accounts = userdata.accounts;
+    res.render('user_acc_stmt',{accountdata: accounts, username: req.user.username});  
+  });
 });
 
 router.get('/:username/checkbook_request', ensureAuthenticated, function (req,res) {
-  res.render('user_checkbook',{ username: req.user.username });
+  User.findOne({username: req.user.username}).populate('accounts').exec((err,userdata)=>{
+    if(err) throw err;
+    var accounts = userdata.accounts;
+    res.render('user_checkbook',{accountdata: accounts, username: req.user.username});  
+  });
 });
 
 router.get('/:username/transactions', ensureAuthenticated, function (req,res) {
 
-  var accdata;
-  User.findOne({username: req.user.username}).exec((err,userdata)=>{
-     if(err) throw err;
-     var accounts = userdata.accounts;
-
-     Account.getAccount({},function(err,accdata){
-        if(err) throw err;
-        // console.log(accdata);
-        res.render('user_transactions',{accountdata: accdata, transactiondata: accdata[0].transactions, username: req.user.username});
-        
-      });
-
   User.findOne({username: req.user.username}).populate('accounts').exec((err,userdata)=>{
     if(err) throw err;
     var accounts = userdata.accounts;
-    if(err) throw err;
-    res.render('user_transactions',{  accountdata: accounts,
-                                      transactiondata: null, //accdata[0].transactions, 
-                                      username: req.user.username});  
-  })
+    res.render('user_transactions',{accountdata: accounts, transactiondata: null, username: req.user.username});  
+  });
 });
 
 router.post('/:username/transactions_post', function (req, res) {

@@ -150,7 +150,7 @@
                                 <td style="text-align:left;">
                                   <div class="form-check">
                                     <label class="form-check-label">
-                                      <input class="form-check-input" type="radio" value="{{this.accountNo}}" name="acc_sel">
+                                      <input class="form-check-input" type="radio" value="{{this.accountNo}}" name="acc_sel" checked="true">
                                         <span class="form-check-sign">
                                             <span class="check"></span>
                                         </span>
@@ -159,7 +159,7 @@
                                 </td>
                                 <td style="text-align:left;">{{this.accountNo}}</td>
                                 <td style="text-align:left;">{{this.type}}</td>
-                                <td style="text-align:left;">NIT Trichy</td>
+                                <td style="text-align:left;">{{this.branch}}</td>
                               </tr>
                               {{/each}}
                             </tbody>
@@ -191,7 +191,7 @@
                                 {{#if transactiondata}}
                                     <tr>
                                       <th style="text-align:left;">Date</th>
-                                      <!-- <th style="text-align:left;">Account No.</th> -->
+                                      <th style="text-align:left;">Beneficiary Account No.</th>
                                       <th style="text-align:left;">Beneficiary</th>
                                       <th style="text-align:left;">Amount</th>                                   
                                     </tr>
@@ -199,7 +199,7 @@
                                     {{#each transactiondata}}
                                     <tr>
                                       <td style="text-align:left;">{{this.date}}</td>
-                                      <!--<td style="text-align:left;">893274937498</td> -->
+                                      <td style="text-align:left;">{{this.beneficiaryAccountNo}}</td> 
                                       <td style="text-align:left;">{{this.beneficiary}}</td>
                                       <td style="text-align:left;">{{this.amount}}</td>
                                     </tr>
