@@ -51,11 +51,13 @@ router.post('/account', function (req,res) {
 	var accountNo = req.body.accountNo;
 	var balance = req.body.balance;
 	var type = req.body.type;
+	var branch = req.body.branch;
 
 	var newAccount = new Account({
 		accountNo: accountNo,
 		balance: balance,
-		type: type
+		type: type,
+		branch: branch
 	});
 
 	User.createAccount(username, newAccount, function (err,user) {

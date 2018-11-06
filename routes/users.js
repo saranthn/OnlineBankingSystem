@@ -73,23 +73,30 @@ router.post('/:username/dashboard', function (req,res) {
   var beneficiary = req.body.beneficiary;
   var amount = req.body.amount;
 
-  //getting current date
-  var currdate = Date.now();
+  if(User.findOne({username : beneficiary})!=null)
+  {
+    var currdate = Date.now();
 
-  //Creating Transaction schema objext
-  var data = new Transaction({
-    date: currdate,
-    amount: amount,
-    beneficiary: beneficiary
-  });
+    //Creating Transaction schema objext
+    var data = new Transaction({
+      date: currdate,
+      amount: amount,
+      beneficiary: beneficiary
+    });
 
-  data.save(function (err) {
-    if(err) throw err;
-    Account.addTransaction(username, accountNo, data, function (err,user) {
+    data.save(function (err) {
       if(err) throw err;
-    })
-  });
-})
+      Account.addTransaction(username, accountNo, data, function (err,user) {
+        if(err) throw err;
+      })
+    });
+  }
+  else
+  {
+    console.log("not valid user");
+    res.redirect('/users/'+username+'dashboard');
+  }
+});
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
