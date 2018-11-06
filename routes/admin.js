@@ -12,6 +12,10 @@ router.get('/register',function (req,res) {
 	res.render('register');
 });
 
+router.get('/account',function(req, res){
+	res.render('admin_accountcreation');
+});
+
 router.post('/register',function (req,res) {
 	var username = req.body.username;
 	var password = req.body.password;
@@ -50,7 +54,9 @@ router.post('/account', function (req,res) {
 	var username = req.body.username;
 	var accountNo = req.body.accountNo;
 	var balance = req.body.balance;
-	var type = req.body.type;
+	var type;
+	type = req.body.acctype;
+
 	var branch = req.body.branch;
 
 	var newAccount = new Account({
