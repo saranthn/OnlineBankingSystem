@@ -11,6 +11,7 @@ var UserSchema = mongoose.Schema({
 	password: String,
 	email: String,
 	accounts: [{type:mongoose.Schema.Types.ObjectId, ref: 'Account'}],
+	notifications: [{type:mongoose.Schema.Types.ObjectId, ref: 'Notification'}],
 	city: String,
 	state: String,
 	pan: Number,
@@ -77,4 +78,13 @@ module.exports.createAccount = function (username, newAccount, callback) {
 
 module.exports.addAccountToUser = function (username, newAccount, callback) {
 	User.findOneAndUpdate({username : username},{$push:{accounts:newAccount}},{new: true}, callback);
+}
+
+module.exports.addNotification = function (username, data, callback) {
+	User.findOneAndUpdate({username : username}, {$push: {notifications : data}},{new: true}, callback);
+}
+
+module.exports.getNotification = function (username, callback) {
+	var query = User.find(username).populate('notifications');
+	query.exec(callback);
 }

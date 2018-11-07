@@ -63,13 +63,6 @@
               </a>
             </li>
   
-            <li class="nav-item ">
-              <a class="nav-link" href="/users/{{username}}/notifications">
-                <i class="material-icons">notifications</i>
-                <p>Notifications</p>
-              </a>
-            </li>
-  
           </ul>
         </div>
     </div>
@@ -97,11 +90,9 @@
                   </p>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#">Mike John responded to your email</a>
-                  <a class="dropdown-item" href="#">You have 5 new tasks</a>
-                  <a class="dropdown-item" href="#">You're now friend with Andrew</a>
-                  <a class="dropdown-item" href="#">Another Notification</a>
-                  <a class="dropdown-item" href="#">Another One</a>
+                  {{#each notification}}
+                  <a class="dropdown-item" href="#">{{this.message}}</a>
+                  {{/each}}
                 </div>
               </li>
               <li class="nav-item dropdown">
@@ -122,23 +113,22 @@
       </nav>
       <!-- End Navbar -->
       <div class="content">
-        <form method="POST" action="/users/{{username}}/checkbook_request">
-        <div class="container-fluid">
+        <form method="POST">
+          <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-12 col-md-6 col-sm-6">
-                    <div class="card card-stats">
-                    <div class="card-header card-header-warning card-header-icon">
-                      <div class="card-icon">
-                        <i class="material-icons">receipt</i>
-                      </div>
-                      <h4 class="card-title" style="font-weight:400;">Select Account for Transactions</h4>
+              <div class="col-lg-12 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                  <div class="card-header card-header-warning card-header-icon">
+                    <div class="card-icon">
+                      <i class="material-icons">receipt</i>
                     </div>
+                    <h4 class="card-title" style="font-weight:400;">Select Account for Transactions</h4>
+                  </div>
     
-                    <div class="card-body">
-<<<<<<< HEAD
-                        <div class="tab-content">
-                          <div class="tab-pane active" id="profile">
-                            <table class="table">
+                  <div class="card-body">
+                    <div class="tab-content">
+                      <div class="tab-pane active" id="profile">
+                        <table class="table">
                               <tbody>
                                 <tr>
                                   <th style="text-align:left;">Select</th>
@@ -151,7 +141,7 @@
                                   <td style="text-align:left;">
                                     <div class="form-check">
                                       <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" name="acc_sel" checked>
+                                        <input class="form-check-input" type="radio" value="{{this.accountNo}}" name="acc_sel" checked>
                                         <span class="form-check-sign">
                                           <span class="check"></span>
                                         </span>
@@ -166,44 +156,12 @@
                               </tbody>
                             </table>
                           </div>
-=======
-                      <div class="tab-content">
-                        <div class="tab-pane active" id="profile">
-                          <table class="table">
-                            <tbody>
-                              <tr>
-                                <th style="text-align:left;">Select</th>
-                                <th style="text-align:left;">Account No</th>
-                                <th style="text-align:left;">Type</th>
-                                <th style="text-align:left;">Branch</th>                                    
-                              </tr>
-                              {{#each accountdata}}
-                              <tr>
-                                <td style="text-align:left;">
-                                  <div class="form-check">
-                                    <label class="form-check-label">
-                                      <input class="form-check-input" type="radio" value="{{this.accountNo}}" name="acc_sel">
-                                        <span class="form-check-sign">
-                                            <span class="check"></span>
-                                        </span>
-                                    </label>
-                                  </div>
-                                </td>
-                                <td style="text-align:left;">{{this.accountNo}}</td>
-                                <td style="text-align:left;">{{this.type}}</td>
-                                <td style="text-align:left;">NIT Trichy</td>
-                              </tr>
-                              {{/each}}
-                            </tbody>
-                          </table>
->>>>>>> 18cac7748ebbd30adf4de0ea02fe9d59975ade28
                         </div>
                       </div>
                     </div> 
                   </div>
-                </form>
+                </div>
               </div>
-            </div>
           <div class="row">
               <div class="col-lg-6 col-md-12">
                   <div class="card">
@@ -241,11 +199,9 @@
           <div class="row">
             <div class="col-md-12" style="padding-left:40%;padding-right: 40%;">
                 <button type="submit" class="btn btn-success" style="float: left;">Go</button>
-                {{!-- <button type="button" class="btn btn-warning" style="float: left;">Cancel</button> --}}
             </div>
           </div>
           </form>
-        </div>
       </div>
       <footer class="footer">
         <div class="container-fluid">
