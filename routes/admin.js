@@ -47,20 +47,22 @@ router.post('/register',function (req,res) {
 	});
 
 	var query = User.findOne({username: username});
-	if(query!=null)
-	{
-		req.flash("info","Username Already Taken");
-		res.redirect('/admin/register');
-	}
-	else
-	{
-		User.createUser(newUser, function (err,user) {
-			if(err) throw err;
-			console.log(user);
-		});
-		req.flash("info","Successfully Registered");
-		res.redirect('/admin/register');
-	}
+	query.exec(function (err, user) {
+		if(user)
+		{		
+			req.flash("info","Username Already Taken");
+			res.redirect('/admin/register');
+		}
+		else
+		{
+			User.createUser(newUser, function (err,user) {
+				if(err) throw err;
+				console.log(user);
+			});
+			req.flash("info","Successfully Registered");
+			res.redirect('/admin/register');
+		}
+	});
 });
 
 router.post('/account', function (req,res) {
@@ -80,27 +82,29 @@ router.post('/account', function (req,res) {
 		branch: branch
 	});
 
-
 	var query = Account.findOne({accountNo: accountNo});
-	if(query!=null)
-	{
-		req.flash("info","Account number already present");
-		res.redirect('/admin/account');
-	}
-	else
-	{
-		User.createAccount(username, newAccount, function (err,user) {
-			if(err) throw err;
-			else
-			{
-				User.addAccountToUser(username,newAccount,function (err) {
-					if(err) throw err;
-				});
-			}
-		});
-		req.flash("info","user registered");
-		res.redirect('/admin/account');
-	}
+	query.exec(function (err, user) {
+		if(user)
+		{		
+			req.flash("info","Account number Already Taken");
+			res.redirect('/admin/account');
+		}
+		else
+		{
+			User.createAccount(username, newAccount, function (err,user) {
+				if(err) throw err;
+				else
+				{
+					User.addAccountToUser(username,newAccount,function (err) {
+						if(err) throw err;
+					});
+				}
+			});
+			req.flash("info","Account registered !!");
+			res.redirect('/admin/account');
+		}
+	});
+
 });
 
 module.exports = router;
