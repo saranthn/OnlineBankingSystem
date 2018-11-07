@@ -1,11 +1,16 @@
 var express = require('express');
 var passport = require('passport');
 var LocalStrategy = require('passport-local'),Strategy;
+
 var router = express.Router();
 
 var User = require('../models/user');
 var Transaction = require('../models/transaction');
 var Account = require('../models/account');
+var Checkbook = require('../models/checkbook');
+
+var dialog = require('dialog');
+//var alertify = require('alertifyjs');
 
 function ensureAuthenticated(req, res, next) {
   if(req.isAuthenticated())
@@ -20,7 +25,7 @@ function ensureAuthenticated(req, res, next) {
 
 
 router.get('/login',function (req,res) {
-	res.render('login');
+  res.render('login');
 });
 
 router.get('/logout',function (req,res) {
@@ -30,7 +35,7 @@ router.get('/logout',function (req,res) {
 })
 
 router.get('/:username/dashboard', ensureAuthenticated,function (req,res) {
-	console.log(req.params.username);
+	console.log(req.params.username+": is in Dashboard");
 	res.render('user_dashboard',{ username: req.user.username });
 });
 
@@ -38,8 +43,43 @@ router.get('/:username/acc_stmt', ensureAuthenticated, function (req,res) {
   res.render('user_acc_stmt',{ username: req.user.username });
 });
 
+//handling get request for checkbook
 router.get('/:username/checkbook_request', ensureAuthenticated, function (req,res) {
-  res.render('user_checkbook',{ username: req.user.username });
+  User.findOne({username: req.user.username}).populate('accounts').exec((err,userdata)=>{
+    if(err) throw err;
+    var accounts = userdata.accounts;
+    if(err) throw err;
+    res.render('user_checkbook',{  accountdata: accounts,
+                                      username: req.user.username});  
+  })
+})
+
+//handling post request for checkbook
+router.post('/:username/checkbook_request', function(req,res){
+  var username = req.user.username;
+  var accountNo = req.body.acc_sel;
+  var noOfCheckbook = req.body.Checkbook;
+  var noOfLeaves = req.body.noOfLeaves;
+  var status = "Requested";
+  
+  var newCheckbook = new Checkbook({
+    username: username,
+    accountNo: accountNo,
+    noOfCheckbook: noOfCheckbook,
+    noOfLeaves: noOfLeaves,
+    status: status 
+  });
+
+  Checkbook.createCheckbook(newCheckbook, function(err){
+    if(err) throw err;
+  })
+
+  dialog.info('Checkbook Request has been registered !', 'My app', function(exitCode) {
+    if (exitCode == 0) console.log(username + ": He accepted the checkbook request");
+
+  res.redirect('/users/'+username+'/dashboard');
+})
+
 });
 
 router.get('/:username/transactions', ensureAuthenticated, function (req,res) {

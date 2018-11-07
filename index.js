@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
-var session = require('express-session');
+var session = require('express-session');	
 var exphbs = require('express-handlebars');
 var passport = require('passport');
 var LocalStrategy = require('passport-local'),Strategy;
@@ -27,6 +27,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+//flash notification
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 //express session
@@ -43,6 +45,8 @@ app.use(function (req,res,next) {
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+//app.use(flashNotif(app));
 
 app.use('/',routes);
 app.use('/users',users);

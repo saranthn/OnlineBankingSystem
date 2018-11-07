@@ -122,67 +122,55 @@
       </nav>
       <!-- End Navbar -->
       <div class="content">
+        <form method="POST" action="/users/{{username}}/checkbook_request">
         <div class="container-fluid">
-          
             <div class="row">
                 <div class="col-lg-12 col-md-6 col-sm-6">
-                  <div class="card card-stats">
-                    <div class="card-header card-header-info card-header-icon">
+                    <div class="card card-stats">
+                    <div class="card-header card-header-warning card-header-icon">
                       <div class="card-icon">
                         <i class="material-icons">receipt</i>
                       </div>
-                      <h4 class="card-title" style="font-weight:400;">Select Account for Checkbook Request</h4>
+                      <h4 class="card-title" style="font-weight:400;">Select Account for Transactions</h4>
                     </div>
     
                     <div class="card-body">
-                        <div class="tab-content">
-                          <div class="tab-pane active" id="profile">
-                            <table class="table">
-                              <tbody>
-                                <tr>
-                                  <th style="text-align:left;">Select</th>
-                                  <th style="text-align:left;">Account No</th>
-                                  <th style="text-align:left;">Type</th>
-                                  <th style="text-align:left;">Branch</th>                                    
-                                </tr>
-                                <tr>
-                                  <td style="text-align:left;">
-                                    <div class="form-check">
-                                      <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" name="acc_sel" checked>
+                      <div class="tab-content">
+                        <div class="tab-pane active" id="profile">
+                          <table class="table">
+                            <tbody>
+                              <tr>
+                                <th style="text-align:left;">Select</th>
+                                <th style="text-align:left;">Account No</th>
+                                <th style="text-align:left;">Type</th>
+                                <th style="text-align:left;">Branch</th>                                    
+                              </tr>
+                              {{#each accountdata}}
+                              <tr>
+                                <td style="text-align:left;">
+                                  <div class="form-check">
+                                    <label class="form-check-label">
+                                      <input class="form-check-input" type="radio" value="{{this.accountNo}}" name="acc_sel">
                                         <span class="form-check-sign">
-                                          <span class="check"></span>
-                                        </span>
-                                      </label>
-                                    </div>
-                                  </td>
-                                  <td style="text-align:left;">103749873289</td>
-                                  <td style="text-align:left;">Savings</td>
-                                  <td style="text-align:left;">NIT Trichy</td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left;">
-                                      <div class="form-check">
-                                        <label class="form-check-label">
-                                          <input class="form-check-input" type="radio" name="acc_sel">
-                                          <span class="form-check-sign">
                                             <span class="check"></span>
-                                          </span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td style="text-align:left;">103749873289</td>
-                                    <td style="text-align:left;">Savings</td>
-                                    <td style="text-align:left;">NIT Trichy</td>
-                                  </tr>
-                              </tbody>
-                            </table>
-                          </div>
+                                        </span>
+                                    </label>
+                                  </div>
+                                </td>
+                                <td style="text-align:left;">{{this.accountNo}}</td>
+                                <td style="text-align:left;">{{this.type}}</td>
+                                <td style="text-align:left;">NIT Trichy</td>
+                              </tr>
+                              {{/each}}
+                            </tbody>
+                          </table>
                         </div>
                       </div>
+                    </div> 
                   </div>
-                </div>            
+                </form>
               </div>
+            </div>
           <div class="row">
               <div class="col-lg-6 col-md-12">
                   <div class="card">
@@ -190,7 +178,7 @@
                       <h5 class="card-title">Enter the no of Books and no of leaves in each books</h5>
                     </div>
                     <div class="card-body">
-                        <form class="form">
+                        <div class="form" action="#">
                             <div class="row">
                                 <div class="col-lg-6">
                                     <label for="staticEmail2" class="sr-only"></label>
@@ -198,7 +186,7 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <label for="inputPassword2" class="sr-only">Year</label>
-                                    <input type="text" class="form-control" id="inputyear" pattern="[0-9]{1}" placeholder="less than 10">
+                                    <input name="noOfCheckbooks" type="text" class="form-control" id="inputyear" pattern="[0-9]{1}" placeholder="less than 10" required>
                                 </div>
                             </div>
                             <div class="row">
@@ -208,26 +196,22 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <label for="inputPassword2" class="sr-only">Year</label>
-                                    <input type="text" class="form-control" id="inputyear" pattern="[0-9]{2}" placeholder="less than 100">
+                                    <input name="noOfLeaves" type="text" class="form-control" id="inputyear" pattern="[0-9]{2}" placeholder="10 - 99" required>
                                 </div>
                             </div>
-                            <br>
-                            <div class="row">
-                                <div class="col-lg-7">
-                                    <button type="submit" class="btn btn-info" style="float:right;">Check</button> 
-                                </div>
-                            </div>                       
-                        </form>
+                            <br>                     
+                        </div>
                     </div>
                   </div>
                 </div>  
             </div>
           <div class="row">
-            <div class="col-md-12" style="margin-left:40%;margin-right: 40%;">
-                <button type="button" class="btn btn-success" style="float: left;">Go</button>
-                <button type="button" class="btn btn-warning" style="float: left;">Cancel</button>
+            <div class="col-md-12" style="padding-left:40%;padding-right: 40%;">
+                <button type="submit" class="btn btn-success" style="float: left;">Go</button>
+                {{!-- <button type="button" class="btn btn-warning" style="float: left;">Cancel</button> --}}
             </div>
           </div>
+          </form>
         </div>
       </div>
       <footer class="footer">
