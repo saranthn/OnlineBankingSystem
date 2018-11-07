@@ -171,13 +171,34 @@ passport.use(new LocalStrategy(
   		if(!user) {
   			return done(null,false,{message: 'UnKnown user'});
   		}
+      if(user.isLocked) {
+        console.log("e1");
+        return User.incLoginAttempts(user, function (err) {
+          if(err) throw err;
+          return done(null,null,{message: 'MAX ATTEMPTS'});
+        });
+      }
   		User.comparePassword(password,user.password,function (err,isMatch) {
   			if(err) throw err;
   			if(isMatch){
+          if(!user.loginAttempts && !user.lockUntil)
   				return done(null,user);
+
+          var updates = {
+            $set:{loginAttempts: 0},
+            $unset: {lockUntil: 1}
+          };
+          return User.updateOne(updates,function (err) {
+            if(err) throw err;
+            return done(null,user)
+          })
   			} 
   			else {
-  				return done(null,false, {message:'Invalid Password'});
+          console.log("invalid password");
+          User.incLoginAttempts(user, function(err) {
+                if (err) throw err;
+                return done(null, false, {message:'Invalid Password'});
+          });
   			}
   		});
   	});

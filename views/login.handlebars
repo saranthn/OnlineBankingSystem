@@ -13,7 +13,7 @@
     <div class="container">
         <div class="card card-container">
             <img id="profile-img" class="profile-img-card" src="https://via.placeholder.com/150">
-            <p id="profile-name" class="profile-name-card"> Username </p>
+            <button class="btn">{{userDetails.loginAttempts}}</button>
             <br>
             <form class="form-signin" method="post" action="/users/login">
                 <span id="reauth-email" class="reauth-email"></span>

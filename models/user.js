@@ -1,5 +1,6 @@
 var mongoose =  require('mongoose');
 var bcrypt = require('bcryptjs');
+var LOCK_TIME = 2 * 60 * 60 * 1000;
 
 var Account = require('../models/account');
 
@@ -14,8 +15,17 @@ var UserSchema = mongoose.Schema({
 	state: String,
 	pan: Number,
 	address: String,
-	zip: Number
+	zip: Number,
+	loginAttempts: { type: Number, required: true, default: 0 },
+    lockUntil: { type: Number}
 });
+
+
+UserSchema.virtual('isLocked').get(function() {
+    // check for a future lockUntil timestamp
+    return !!(this.lockUntil && this.lockUntil > Date.now());
+});
+
 
 var User = module.exports = mongoose.model('User',UserSchema);
 
@@ -42,6 +52,23 @@ module.exports.comparePassword = function (candidatePassword, hash, callback) {
 		 if(err) throw err;
 		 callback(null, isMatch);
 	});
+}
+;
+module.exports.incLoginAttempts = function (data, callback) {
+    if (data.lockUntil && data.lockUntil < Date.now()) {
+        return data.updateOne({
+            $set: { loginAttempts: 1 },
+            $unset: { lockUntil: 1 }
+        }, callback);
+    }
+    var updates = { $inc: { loginAttempts: 1 } };
+    console.log(data.loginAttempts);
+    console.log(data.isLocked);
+    if (data.loginAttempts + 1 >= 3 && !data.isLocked) {
+    	console.log("enter");
+        updates.$set = { lockUntil: Date.now() + LOCK_TIME };
+    }
+    return data.updateOne(updates, callback);
 }
 
 module.exports.createAccount = function (username, newAccount, callback) {
