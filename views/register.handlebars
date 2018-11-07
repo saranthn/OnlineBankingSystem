@@ -20,6 +20,13 @@
 </head>
 <body>
     <div class="card" style="width: 50rem;margin:3rem;margin-left: 17.5rem;box-shadow: 0 0 10px #999999;">
+        <div class="row">
+          <div class="col-lg-12">
+              {{#if msg}}
+              <div class="alert alert-danger">{{msg}}</div>
+              {{/if}}
+          </div>
+        </div>
         <form class="needs-validation" style="padding: 2rem;" method="post" action="/admin/register" novalidate>
 
                 <div class="form-row">

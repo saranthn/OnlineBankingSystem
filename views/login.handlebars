@@ -13,7 +13,13 @@
     <div class="container">
         <div class="card card-container">
             <img id="profile-img" class="profile-img-card" src="https://via.placeholder.com/150">
-            <button class="btn">{{userDetails.loginAttempts}}</button>
+            <div class="row">
+              <div class="col-lg-12">
+                  {{#if error_msg}}
+                  <div class="alert alert-danger">{{error_msg}}</div>
+                  {{/if}}
+              </div>
+            </div>
             <br>
             <form class="form-signin" method="post" action="/users/login">
                 <span id="reauth-email" class="reauth-email"></span>

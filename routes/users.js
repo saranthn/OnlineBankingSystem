@@ -20,7 +20,7 @@ function ensureAuthenticated(req, res, next) {
 
 
 router.get('/login',function (req,res) {
-	res.render('login');
+	res.render('login',{error_msg: req.flash("message")});
 });
 
 router.get('/logout',function (req,res) {
@@ -164,18 +164,17 @@ router.post('/:username/dashboard', function (req,res) {
 
 });
 
-passport.use(new LocalStrategy(
-  function(username, password, done) {
+passport.use(new LocalStrategy({passReqToCallback :true},
+  function(req, username, password, done) {
   	User.getUserByUsername(username,function (err,user) {
   		if(err) throw err;
   		if(!user) {
-  			return done(null,false,{message: 'UnKnown user'});
+  			return done(null,false,req.flash("message","Not a User"));
   		}
       if(user.isLocked) {
-        console.log("e1");
         return User.incLoginAttempts(user, function (err) {
           if(err) throw err;
-          return done(null,null,{message: 'MAX ATTEMPTS'});
+        return done(null,null,req.flash("message","Maximum Tries Exceeded"));
         });
       }
   		User.comparePassword(password,user.password,function (err,isMatch) {
@@ -197,7 +196,7 @@ passport.use(new LocalStrategy(
           console.log("invalid password");
           User.incLoginAttempts(user, function(err) {
                 if (err) throw err;
-                return done(null, false, {message:'Invalid Password'});
+                return done(null,false,req.flash("message","Invalid password"));
           });
   			}
   		});
@@ -216,7 +215,8 @@ passport.deserializeUser(function(id, done) {
 });
 
 router.post('/login',
-  passport.authenticate('local',{failureRedirect:'/users/login'}),
+  passport.authenticate('local',{failureRedirect:'/users/login',badRequestMessage : 'Missing username or password.',
+    failureFlash: true}),
   function(req, res) {
     // If this function gets called, authentication was successful.
     // `req.user` contains the authenticated user.

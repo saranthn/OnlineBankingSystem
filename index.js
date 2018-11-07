@@ -6,6 +6,7 @@ var exphbs = require('express-handlebars');
 var passport = require('passport');
 var LocalStrategy = require('passport-local'),Strategy;
 var path = require('path');
+var flash = require('connect-flash');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/bank', { useNewUrlParser: true });
@@ -35,6 +36,8 @@ app.use(session({
 	saveUninitialized : true,
 	resave : true
 }));
+
+app.use(flash());
 
 app.use(function (req,res,next) {
 	res.locals.user = req.user || null;

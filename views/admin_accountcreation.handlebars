@@ -16,6 +16,13 @@
   <form method="POST" action="/admin/account"> 
     <h2 style="margin-left:34%;">Create Account</h2 >
     <div class="row">
+      <div class="col-lg-12">
+          {{#if msg}}
+          <div class="alert alert-danger">{{msg}}</div>
+          {{/if}}
+      </div>
+    </div>
+    <div class="row">
       <h4>Account Details</h4>
       <div class="input-group input-group-icon">
         <input type="text" placeholder="Username" name="username"/>

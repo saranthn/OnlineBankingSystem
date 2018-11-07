@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var flash = require('connect-flash');
 
 var User = require('../models/user');
 var Account = require('../models/account');
@@ -13,11 +14,11 @@ router.get('/login',function (req,res) {
 });
 
 router.get('/register',function (req,res) {
-	res.render('register');
+	res.render('register',{msg: req.flash("info")});
 });
 
 router.get('/account',function(req, res){
-	res.render('admin_accountcreation');
+	res.render('admin_accountcreation',{msg: req.flash("info")});
 });
 
 router.post('/register',function (req,res) {
@@ -45,12 +46,21 @@ router.post('/register',function (req,res) {
 		zip:zip
 	});
 
-	User.createUser(newUser, function (err,user) {
-		if(err) throw err;
-		console.log(user);
-	});
-
-	res.redirect('/users/login');
+	var query = User.findOne({username: username});
+	if(query!=null)
+	{
+		req.flash("info","Username Already Taken");
+		res.redirect('/admin/register');
+	}
+	else
+	{
+		User.createUser(newUser, function (err,user) {
+			if(err) throw err;
+			console.log(user);
+		});
+		req.flash("info","Successfully Registered");
+		res.redirect('/admin/register');
+	}
 });
 
 router.post('/account', function (req,res) {
@@ -70,16 +80,27 @@ router.post('/account', function (req,res) {
 		branch: branch
 	});
 
-	User.createAccount(username, newAccount, function (err,user) {
-		if(err) throw err;
-		else
-		{
-			User.addAccountToUser(username,newAccount,function (err) {
-				if(err) throw err;
-			});
-		}
-	});
-	res.redirect('/users/login');
+
+	var query = Account.findOne({accountNo: accountNo});
+	if(query!=null)
+	{
+		req.flash("info","Account number already present");
+		res.redirect('/admin/account');
+	}
+	else
+	{
+		User.createAccount(username, newAccount, function (err,user) {
+			if(err) throw err;
+			else
+			{
+				User.addAccountToUser(username,newAccount,function (err) {
+					if(err) throw err;
+				});
+			}
+		});
+		req.flash("info","user registered");
+		res.redirect('/admin/account');
+	}
 });
 
 module.exports = router;
