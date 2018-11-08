@@ -1,6 +1,6 @@
 var mongoose =  require('mongoose');
 var bcrypt = require('bcryptjs');
-var LOCK_TIME = 2 * 60 * 60 * 1000;
+var LOCK_TIME = 1 * 60 * 1000;
 
 var Account = require('../models/account');
 
