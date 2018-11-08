@@ -6,6 +6,7 @@ var User = require('../models/user');
 var Account = require('../models/account');
 
 router.get('/', function(req,res){
+	// req.logout();
 	res.render('admindashboard');
 });
 
@@ -82,28 +83,39 @@ router.post('/account', function (req,res) {
 		branch: branch
 	});
 
-	var query = Account.findOne({accountNo: accountNo});
-	query.exec(function (err, user) {
+	var q = User.findOne({username: username});
+	q.exec(function (err,user) {
 		if(user)
-		{		
-			req.flash("info","Account number Already Taken");
-			res.redirect('/admin/account');
+		{
+			var query = Account.findOne({accountNo: accountNo});
+			query.exec(function (err, user) {
+				if(user)
+				{		
+					req.flash("info","Account number Already Taken");
+					res.redirect('/admin/account');
+				}
+				else
+				{
+					User.createAccount(username, newAccount, function (err,user) {
+						if(err) throw err;
+						else
+						{
+							User.addAccountToUser(username,newAccount,function (err) {
+								if(err) throw err;
+							});
+						}
+					});
+					req.flash("info","Account registered !!");
+					res.redirect('/admin/account');
+				}
+			});
 		}
 		else
 		{
-			User.createAccount(username, newAccount, function (err,user) {
-				if(err) throw err;
-				else
-				{
-					User.addAccountToUser(username,newAccount,function (err) {
-						if(err) throw err;
-					});
-				}
-			});
-			req.flash("info","Account registered !!");
+			req.flash("info","User does not exist");
 			res.redirect('/admin/account');
 		}
-	});
+	})
 
 });
 

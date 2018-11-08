@@ -136,7 +136,7 @@ router.post('/:username/transactions', function (req, res) {
           var transactionlist = accdata[0].transactions;
           //console.log("transaction list: " + transactionlist);
           
-          res.render('user_transactions',{  accountdata: totalaccount, transactiondata: transactionlist, username: req.user.username});
+          res.render('user_transactions',{  accountdata: userdata.accounts, transactiondata: transactionlist, username: req.user.username});
         });
      });
   });
@@ -228,7 +228,7 @@ router.post('/:username/dashboard', function (req,res) {
 
                     Notification.createNotification(newNotification2, function (err, data) {
                       if(err) throw err;
-                      User.addNotification(username, data, function (err,user) {
+                      User.addNotification(beneficiary, data, function (err,user) {
                         if(err) throw err;
                       });
                     });
@@ -349,7 +349,10 @@ router.post('/login',
   function(req, res) {
     // If this function gets called, authentication was successful.
     // `req.user` contains the authenticated user.
-    res.redirect('/users/' + req.user.username+'/dashboard');
+    if(req.user.username=="root")
+      res.redirect('/admin');
+    else
+      res.redirect('/users/' + req.user.username+'/dashboard');
   });
 
 router.post('/:username/profile', function (req,res) {
