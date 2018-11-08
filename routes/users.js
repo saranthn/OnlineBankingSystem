@@ -8,7 +8,6 @@ var User = require('../models/user');
 var Transaction = require('../models/transaction');
 var Account = require('../models/account');
 var Checkbook = require('../models/checkbook');
-var Notification = require('../models/notification');
 
 var dialog = require('dialog');
 //var alertify = require('alertifyjs');
@@ -36,70 +35,50 @@ router.get('/logout',function (req,res) {
 })
 
 router.get('/:username/dashboard', ensureAuthenticated,function (req,res) {
-	  User.findOne({username: req.user.username}).populate('accounts').populate('notifications').exec((err,userdata)=>{
+	  User.findOne({username: req.user.username}).populate('accounts').exec((err,userdata)=>{
     if(err) throw err;
     var accounts = userdata.accounts;
-    var notification = userdata.notifications;
-    res.render('user_dashboard',{accountdata: accounts, username: req.user.username,notification: notification});  
+    res.render('user_dashboard',{accountdata: accounts, username: req.user.username});  
   });
 });
 
 router.get('/:username/acc_stmt', ensureAuthenticated, function (req,res) {
-  User.findOne({username: req.user.username}).populate('accounts').populate('notifications').exec((err,userdata)=>{
+  User.findOne({username: req.user.username}).populate('accounts').exec((err,userdata)=>{
     if(err) throw err;
     var accounts = userdata.accounts;
-    var notification = userdata.notifications;
-    res.render('user_acc_stmt',{accountdata: accounts, username: req.user.username,notification: notification});  
+    res.render('user_acc_stmt',{accountdata: accounts, username: req.user.username});  
   });
 });
 
 //handling get request for checkbook
 router.get('/:username/checkbook_request', ensureAuthenticated, function (req,res) {
-  User.findOne({username: req.user.username}).populate('accounts').populate('notifications').exec((err,userdata)=>{
+  User.findOne({username: req.user.username}).populate('accounts').exec((err,userdata)=>{
     if(err) throw err;
     var accounts = userdata.accounts;
-    var notification = userdata.notifications;
-    res.render('user_checkbook',{accountdata: accounts, username: req.user.username,notification: notification});  
+    if(err) throw err;
+    res.render('user_checkbook',{accountdata: accounts, username: req.user.username});  
   });
 });
 
 //handling post request for checkbook
 router.post('/:username/checkbook_request', function(req,res){
-
-  console.log(req.body);
-
   var username = req.user.username;
   var accountNo = req.body.acc_sel;
-  var noOfCheckbook = req.body.noOfCheckbooks;
+  var noOfCheckbook = req.body.Checkbook;
   var noOfLeaves = req.body.noOfLeaves;
   var status = "Requested";
-  var message = "Checkbook requested for : "+accountNo;
-
-  console.log("hello");
-  console.log(username);
   
   var newCheckbook = new Checkbook({
     username: username,
-    accountNo: parseInt(accountNo),
-    noOfCheckbook: parseInt(noOfCheckbook),
-    noOfLeaves: parseInt(noOfLeaves),
+    accountNo: accountNo,
+    noOfCheckbook: noOfCheckbook,
+    noOfLeaves: noOfLeaves,
     status: status 
-  });
-
-  var newNotification = new Notification({
-    message: message
-  });
-
-  Notification.createNotification(newNotification, function (err, data) {
-    if(err) throw err;
-    User.addNotification(username, data, function (err,user) {
-      if(err) throw err;
-    });
   });
 
   Checkbook.createCheckbook(newCheckbook, function(err){
     if(err) throw err;
-  });
+  })
 
   dialog.info('Checkbook Request has been registered !', 'My app', function(exitCode) {
     if (exitCode == 0) console.log(username + ": He accepted the checkbook request");
@@ -110,136 +89,161 @@ router.post('/:username/checkbook_request', function(req,res){
 
 router.get('/:username/transactions', ensureAuthenticated, function (req,res) {
 
-  User.findOne({username: req.user.username}).populate('accounts').populate('notifications').exec((err,userdata)=>{
+  User.findOne({username: req.user.username}).populate('accounts').exec((err,userdata)=>{
     if(err) throw err;
     var accounts = userdata.accounts;
-    var notification = userdata.notifications;
-    res.render('user_transactions',{accountdata: accounts, transactiondata: null, username: req.user.username,notification: notification});  
+    res.render('user_transactions',{accountdata: accounts, transactiondata: null, username: req.user.username});  
   });
 });
 
 router.post('/:username/transactions', function (req, res) {
 
-  var accno = req.body.acc_sel;
-  //console.log("Selected account no: " + accno);
-  User.findOne({username: req.user.username}).populate('accounts').exec((err,userdata)=>{
-     if(err) throw err;
-     //console.log("Userdata: " + userdata);
+    var accno = req.body.acc_sel;
+    //console.log("Selected account no: " + accno); 
+    User.findOne({username: req.user.username}).populate('accounts').exec((err,userdata)=>{
+       if(err) throw err;
+       //console.log("Userdata: " + userdata);
 
-     Account.getAccount({}, function(err,totalaccount){
-        if(err) throw err;
-
-        Account.getAccount({accountNo: accno},function(err,accdata){
+       Account.getAccount({}, function(err,totalaccount){
           if(err) throw err;
-          //console.log("Selected account data: " + accdata);
 
-          var transactionlist = accdata[0].transactions;
-          //console.log("transaction list: " + transactionlist);
-          
-          res.render('user_transactions',{  accountdata: totalaccount, transactiondata: transactionlist, username: req.user.username});
-        });
-     });
-  });
+          Account.getAccount({accountNo: accno},function(err,accdata){
+            if(err) throw err;
+            //console.log("Selected account data: " + accdata);
+  
+            var transactionlist = accdata[0].transactions;
+            //console.log("transaction list: " + transactionlist);
+            
+            res.render('user_transactions',{  accountdata: totalaccount,
+                          transactiondata: transactionlist, 
+                          username: req.user.username,
+                        });
+  
+          });
+
+       });
+  
+    });
 });
 
 router.get('/:username/profile', ensureAuthenticated, function (req,res) {
-  User.findOne({username: req.user.username}).populate('accounts').populate('notifications').exec((err,userdata)=>{
-    if(err) throw err;
-    var accounts = userdata.accounts;
-    var notification = userdata.notifications;
-    res.render('user_profile',{accountdata: accounts, userDetails: req.user,notification: notification});  
-  });
+  res.render('user_profile',{ userDetails: req.user });
 });
 
 router.post('/:username/dashboard', function (req,res) {
+
   var username = req.user.username;
   var accountNo = req.body.accountNo;
   var beneficiary = req.body.beneficiary;
   var beneficiaryAccountNo = req.body.beneficiaryAccountNo;
   var amount = parseInt(req.body.amount);
 
-  User.getUserByUsername(beneficiary,function (err,user) {
+  var benefquery = User.findOne({username: beneficiary}).populate('accounts');
+  benefquery.exec(function(err, beneficiaryuserdata){
     if(err) throw err;
-    if(user)
-    {
-      var message1 = "Successfully transferred to "+beneficiaryAccountNo;
-      var message2 = "Successfully credited from "+accountNo;
-      var currdate = Date.now();
 
-      //Creating Transaction schema objext
-      var data = new Transaction({
-        date: currdate,
-        amount: -amount,
-        beneficiary: beneficiary,
-        beneficiaryAccountNo: beneficiaryAccountNo
-      });
+    if(beneficiaryuserdata == null){
+      dialog.info("no such beneficiary name");
+      res.redirect('/users/'+username+'/dashboard');
+      return;
+    }
+    //console.log("The beneficiary accounts: " + beneficiaryuserdata.accounts);
+    var bfound = false;
+    for(var benefaccNo in beneficiaryuserdata.accounts) {
+      //console.log("benefaccNo" + benefaccNo);
+      //console.log("benefaccuserdata: " + beneficiaryuserdata.accounts[benefaccNo]);
+      var benefaccounts = beneficiaryuserdata.accounts[benefaccNo]; 
 
-      var beneficiarydata = new Transaction({
-        date: currdate,
-        amount: amount,
-        beneficiary: username,
-        beneficiaryAccountNo: accountNo
-      })
-
-      var newNotification1 = new Notification({
-        message: message1
-      });
-
-      var newNotification2 = new Notification({
-        message: message2
-      });
-
-      Notification.createNotification(newNotification1, function (err, data) {
-        if(err) throw err;
-        User.addNotification(username, data, function (err,user) {
+      if(benefaccounts.accountNo == beneficiaryAccountNo){
+        bfound = true;
+        console.log("benefactno check");
+        var usernamequery = User.findOne({username: username}).populate('accounts');
+        usernamequery.exec(function(err, usernamedata){
           if(err) throw err;
-        });
-      });
+          var afound = false;
+          for(var useraccNo in usernamedata.accounts){
+            var userAccontEle = usernamedata.accounts[useraccNo];
+            if(userAccontEle.accountNo == accountNo){
+                console.log("userno check");
+                afound = true;
+                User.getUserByUsername(beneficiary,function (err,user) {
+                  if(err) throw err;
+                  if(user)
+                  {
+                    var currdate = Date.now();
+              
+                    //Creating Transaction schema objext
+                    var data = new Transaction({
+                      date: currdate,
+                      amount: -amount,
+                      beneficiary: beneficiary,
+                      beneficiaryAccountNo: beneficiaryAccountNo
+                    });
+              
+              
+                    var beneficiarydata = new Transaction({
+                      date: currdate,
+                      amount: amount,
+                      beneficiary: username,
+                      beneficiaryAccountNo: accountNo
+                    })
+              
+                    Account.getBalance(accountNo,function (err, data) {
+                      if(err) throw err;
+                      console.log(data.balance);
+                      Account.updateBalance(accountNo,data.balance-amount,function (err, data) {
+                        if(err) throw err;
+                      });
+                    });
+              
+                    Account.getBalance(beneficiaryAccountNo,function (err, data) {
+                      if(err) throw err;
+                      console.log(data.balance);
+                      Account.updateBalance(beneficiaryAccountNo,data.balance+amount,function (err, data) {
+                        if(err) throw err;
+                        console.log("done");
+                      });
+                    });
+              
+                    data.save(function (err) {
+                      if(err) throw err;
+                      Account.addTransaction(username, accountNo, data, function (err,user) {
+                        if(err) throw err;
+                      });
+                    });
+              
+                    beneficiarydata.save(function (err) {
+                      if(err) throw err;
+                      Account.addTransaction(beneficiary, beneficiaryAccountNo, beneficiarydata, function (err,user) {
+                        if(err) throw err;
+                      });
+                    });
+                  }
+                  else
+                  {
+                    console.log("not valid beneficiary");
+                    res.redirect('/users/'+username+'/dashboard');
+                  }
+                });
+                res.redirect('/users/'+username+'/dashboard');
+            }
 
-       Notification.createNotification(newNotification2, function (err, data) {
-        if(err) throw err;
-        User.addNotification(username, data, function (err,user) {
-          if(err) throw err;
-        });
-      });
+          }
 
-      Account.getBalance(accountNo,function (err, data) {
-        if(err) throw err;
-        console.log(data.balance);
-        Account.updateBalance(accountNo,data.balance-amount,function (err, data) {
-          if(err) throw err;
-        });
-      });
+          if(!afound){
+            dialog.info("not a valid accountNo in your profile");
+            res.redirect('/users/'+username+'/dashboard');
+          }
 
-      Account.getBalance(beneficiaryAccountNo,function (err, data) {
-        if(err) throw err;
-        console.log(data.balance);
-        Account.updateBalance(beneficiaryAccountNo,data.balance+amount,function (err, data) {
-          if(err) throw err;
-          console.log("done");
-        });
-      });
+        }); 
+      }
+    }
 
-      data.save(function (err) {
-        if(err) throw err;
-        Account.addTransaction(username, accountNo, data, function (err,user) {
-          if(err) throw err;
-        });
-      });
-
-      beneficiarydata.save(function (err) {
-        if(err) throw err;
-        Account.addTransaction(beneficiary, beneficiaryAccountNo, beneficiarydata, function (err,user) {
-          if(err) throw err;
-        });
-      });
+    if(!bfound){
+      dialog.info("not valid beneficiary account No..");
       res.redirect('/users/'+username+'/dashboard');
     }
-    else
-    {
-      console.log("not valid beneficiary");
-      res.redirect('/users/'+username+'/dashboard');
-    }
+
   });
 
 });
