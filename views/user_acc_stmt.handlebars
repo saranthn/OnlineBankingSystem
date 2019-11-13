@@ -116,54 +116,53 @@
       <!-- End Navbar -->
       <div class="content">
         <div class="container-fluid">
-          
+          <form method="POST">
             <div class="row">
-                <div class="col-lg-12 col-md-6 col-sm-6">
-                  <div class="card card-stats">
-                    <div class="card-header card-header-warning card-header-icon">
-                      <div class="card-icon">
-                        <i class="material-icons">event_note</i>
-                      </div>
-                      <h4 class="card-title" style="font-weight:400;">Select Account for Statement</h4>
+              <div class="col-lg-12 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                  <div class="card-header card-header-warning card-header-icon">
+                    <div class="card-icon">
+                      <i class="material-icons">event_note</i>
                     </div>
-    
-                    <div class="card-body">
-                        <div class="tab-content">
-                          <div class="tab-pane active" id="profile">
-                            <table class="table">
-                              <tbody>
-                                <tr>
-                                  <th style="text-align:left;">Select</th>
-                                  <th style="text-align:left;">Account No</th>
-                                  <th style="text-align:left;">Type</th>
-                                  <th style="text-align:left;">Branch</th>                                    
-                                </tr>
-                                {{#each accountdata}}
-                                <tr>
-                                  <td style="text-align:left;">
-                                    <div class="form-check">
-                                      <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" name="acc_sel" checked>
-                                        <span class="form-check-sign">
-                                          <span class="check"></span>
-                                        </span>
-                                      </label>
-                                    </div>
-                                  </td>
-                                  <td style="text-align:left;">{{this.accountNo}}</td>
-                                  <td style="text-align:left;">{{this.type}}</td>
-                                  <td style="text-align:left;">{{this.branch}}</td>
-                                </tr>
-                                {{/each}}
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      </div>
+                    <h4 class="card-title" style="font-weight:400;">Select Account for Statement</h4>
                   </div>
-                </div>            
-              </div>
-          <div class="row">
+                  <div class="card-body">
+                    <div class="tab-content">
+                      <div class="tab-pane active" id="profile">
+                        <table class="table">
+                          <tbody>
+                            <tr>
+                              <th style="text-align:left;">Select</th>
+                              <th style="text-align:left;">Account No</th>
+                              <th style="text-align:left;">Type</th>
+                              <th style="text-align:left;">Branch</th>                                    
+                            </tr>
+                            {{#each accountdata}}
+                            <tr>
+                              <td style="text-align:left;">
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" value="{{this.accountNo}}" name="acc_sel" checked>
+                                    <span class="form-check-sign">
+                                      <span class="check"></span>
+                                    </span>
+                                  </label>
+                                </div>
+                              </td>
+                              <td style="text-align:left;">{{this.accountNo}}</td>
+                              <td style="text-align:left;">{{this.type}}</td>
+                              <td style="text-align:left;">{{this.branch}}</td>
+                            </tr>
+                            {{/each}}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>            
+            </div>
+            <div class="row">
               <div class="col-lg-6 col-md-12">
                 <div class="card">
                   <div class="card-header card-header-tabs card-header-primary">
@@ -177,12 +176,6 @@
                               <div class="ripple-container"></div>
                             </a>
                           </li>
-                          <li class="nav-item">
-                            <a class="nav-link" href="#annual" data-toggle="tab">
-                              Annual
-                              <div class="ripple-container"></div>
-                            </a>
-                          </li>
                         </ul>
                       </div>
                     </div>
@@ -190,61 +183,22 @@
                   <div class="card-body">
                     <div class="tab-content">
                       <div class="tab-pane active" id="monthly">
-                        <form class="form-inline">
-                            <div class="form-group mb-2">
-                              <label for="staticEmail2" class="sr-only"></label>
-                              <p style="font-weight:400;" type="text" class="form-control-plaintext">Enter Month :</p>
-                            </div>
-                            <div class="form-group mx-sm-3 mb-2">
-                              <label for="inputPassword2" class="sr-only">Month</label>
-                              <input type="text" class="form-control" id="inputMonth" placeholder="Enter month name">
-                            </div>
-                            <button type="submit" class="btn btn-primary mb-2">Set</button>
-                          </form>
-                      </div>
-                      <div class="tab-pane" id="annual">
-                        <form class="form-inline">
-                          <div class="form-group mb-2">
-                            <label for="staticEmail2" class="sr-only"></label>
-                            <p style="font-weight:400;" type="text" class="form-control-plaintext">Enter Year :</p>
-                          </div>
-                          <div class="form-group mx-sm-3 mb-2">
-                            <label for="inputPassword2" class="sr-only">Year</label>
-                            <input type="text" class="form-control" id="inputyear" pattern="[0-9]{4}" placeholder="Enter year no">
-                          </div>
-                          <button type="submit" class="btn btn-primary mb-2">Set</button>
-                        </form>
+                        <div class="form-group mb-2">
+                          <label for="staticEmail2" class="sr-only"></label>
+                          <p style="font-weight:400;" type="text" class="form-control-plaintext">Enter Month :</p>
+                        </div>
+                        <div class="form-group mx-sm-3 mb-2">
+                          <label for="inputPassword2" class="sr-only">Month</label>
+                          <input type="text" class="form-control" id="inputMonth" name="inputMonth" placeholder="Enter month name">
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-2">Set</button>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-lg-6 col-md-12">
-                  <div class="card">
-                    <div class="card-header card-header-warning">
-                      <h5 class="card-title">No of Records per Page :</h5>
-                    </div>
-                    <div class="card-body">
-                        <form class="form-inline">
-                            <div class="form-group mb-2">
-                              <label for="staticEmail2" class="sr-only"></label>
-                              <p style="font-weight:400;" type="text" class="form-control-plaintext">Enter Year :</p>
-                            </div>
-                            <div class="form-group mx-sm-3 mb-2">
-                              <label for="inputPassword2" class="sr-only">Year</label>
-                              <input type="text" class="form-control" id="inputyear" pattern="[0-9]{4}" placeholder="Enter year no">
-                            </div>
-                            <button type="submit" class="btn btn-warning mb-2">Set</button>
-                          </form>
-                    </div>
-                  </div>
-                </div>  
+              </div> 
             </div>
-          <div class="row">
-            <div class="col-md-12">
-                <button type="button" class="btn btn-success" style="float:right;">Go</button>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
       <footer class="footer">

@@ -11,6 +11,8 @@ var Checkbook = require('../models/checkbook');
 var Notification = require('../models/notification');
 
 var dialog = require('dialog');
+var PDFDocument = require('pdfkit');
+var fs = require('fs');
 //var alertify = require('alertifyjs');
 
 function ensureAuthenticated(req, res, next) {
@@ -51,6 +53,72 @@ router.get('/:username/acc_stmt', ensureAuthenticated, function (req,res) {
     var notification = userdata.notifications;
     res.render('user_acc_stmt',{accountdata: accounts, username: req.user.username,notification: notification});  
   });
+});
+
+//handling post request for account statement
+router.post('/:username/acc_stmt', ensureAuthenticated, function (req, res) {
+  var username = req.user.username;
+  var accountNo = req.body.acc_sel;
+  var transactionlist = null;
+  var message = "Account Statement generated for : "+accountNo;
+  console.log(req.body.acc_sel);
+  // Create a document
+  const doc = new PDFDocument;
+
+  // Pipe its output somewhere, like to a file or HTTP response
+  // See below for browser usage
+  doc.pipe(fs.createWriteStream('output.pdf'));
+  doc.fontSize(25).text("Loanly Bank");
+  doc.moveDown();
+
+  User.findOne({username: username}).populate('accounts').exec((err,userdata)=>{
+    if(err) throw err;
+    //console.log("Userdata: " + userdata);
+
+    Account.getAccount({}, function(err,totalaccount){
+       if(err) throw err;
+
+       Account.getAccount({accountNo: accountNo},function(err,accdata){
+         if(err) throw err;
+         //console.log("Selected account data: " + accdata);
+
+         var k = 100;
+         transactionlist = accdata[0].transactions;
+         for(var i=0; i<transactionlist.length;i++)
+          {
+            var date = "Date: " + transactionlist[i].date;
+            var beneficiary = "Beneficiary: " + transactionlist[i].beneficiary;
+            var beneficiaryAccountNo = "Beneficiary Account No: " + transactionlist[i].beneficiaryAccountNo;
+            if(transactionlist[i].amount>0)
+              var amount = "Credit: " + transactionlist[i].amount;
+            else
+              var amount = "Debit: " + transactionlist[i].amount;
+            doc.fontSize(15).text(date);
+            doc.fontSize(15).text(beneficiary);
+            doc.fontSize(15).text(beneficiaryAccountNo);
+            doc.fontSize(15).text(amount);
+            doc.moveDown();
+          }
+          doc.end();
+       });
+    });
+  });
+  var newNotification = new Notification({
+    message: message
+  });
+
+  Notification.createNotification(newNotification, function (err, data) {
+    if(err) throw err;
+    User.addNotification(username, data, function (err,user) {
+      if(err) throw err;
+    });
+  });
+
+  dialog.info('Account Statement generated!', 'My app', function(exitCode) {
+    if (exitCode == 0) console.log(username + ": generated account statement");
+    res.redirect('/users/'+username+'/dashboard');
+  });
+
 });
 
 //handling get request for checkbook
