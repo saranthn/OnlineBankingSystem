@@ -1,0 +1,50 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/login.css" />
+    <script src="/js/bootstrap.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row" style="height:100%; padding-top: 0%;">
+            <div class="col-md-6">
+                <img style="background-color:black; height:55%; margin-top: 0%;" src="/images/logo.png">
+                <h1 style="color: white; font-family:sans-serif; font-size: 70px;">Loanly Bank</h1>
+                <h3 style="color: white; font-family:sans-serif; font-size: 20px;">Online Banking System using Node.js, mongodb and passport.js</h3>
+                <br>
+                <br>
+                <h3 style="color: white; font-family:sans-serif; font-size: 15px;">Made with love by Team Loanly</h3>
+                
+            </div>
+            <div class="col-md-6" style="padding:0;">
+                <div class="card card-container">
+                    <img id="profile-img" style="background-color:black;" class="profile-img-card" src="/images/logo.png">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            {{#if error_msg}}
+                            <div class="alert alert-danger">{{error_msg}}</div>
+                            {{/if}}
+                        </div>
+                    </div>
+                    <br>
+                    <form class="form-signin" method="post" action="/users/login">
+                        <span id="reauth-email" class="reauth-email"></span>
+                        <input type="text" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
+                        <input type="password" id="inputPassord" name="password" class="form-control" placeholder="Password" required>
+                        <br>
+                        <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+                    </form>
+                    <a href="#" class="forgot-password">
+                        Forgot the password?
+                    </a>
+                </div>
+            </div>    
+        </div>
+    </div>
+</body>
+</html>
